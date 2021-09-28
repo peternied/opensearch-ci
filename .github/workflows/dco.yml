@@ -17,7 +17,7 @@ jobs:
           # Get the list of commit ids to check from git
           echo "::notice ::1"
           commits=$(git rev-list remotes/origin/${{github.base_ref}}..HEAD --)
-          echo "::notice ::2"
+          echo "::notice ::2 "
 
           # Scan each commit for the sign off message
           missingSignoff=0
