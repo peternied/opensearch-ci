@@ -1,0 +1,31 @@
+name: Developer Certificate of Origin Check
+
+on: [pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+  
+      - name: Run CDK Build and Test
+        run: | 
+          # Get the list of commit ids to check from git
+          commits=$(git rev-list ${{github.base_ref}}..HEAD --)
+
+          # Scan each commit for the sign off message
+          missingSignoff=0
+          for commitId in $commits; do
+              commitMessage=$(git rev-list --format=%B --max-count=1 $commitId)
+              signoffStringCount=$(echo $commitMessage | grep -c Signed-off-by)
+              if [ $signoffStringCount -eq 0 ]; then
+                echo !!! Commit "$commitId" is missing signoff, amend this commit with the --signoff flag
+                let "missingSignoff++"
+              fi
+          done
+
+          # Return non-zero error code if any commits were missing signoff
+          exit $missingSignoff
