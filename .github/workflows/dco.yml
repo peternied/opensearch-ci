@@ -16,7 +16,7 @@ jobs:
         run: | 
           # Get the list of commit ids to check from git
           echo "::notice ::1"
-          commits=$(git rev-list remotes/origin/${{github.base_ref}}..HEAD --)
+          commits=$(git rev-list remotes/origin/${{github.base_ref}}..HEAD~1 --)
           echo "::notice ::2 $commits"
 
           # Scan each commit for the sign off message
