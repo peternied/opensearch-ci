@@ -14,7 +14,7 @@ jobs:
       - name: Run CDK Build and Test
         run: | 
           # Get the list of commit ids to check from git
-          commits=$(git rev-list ${{github.base_ref}}..HEAD --)
+          commits=$(git rev-list ${{github.base_ref}}..HEAD)
 
           # Scan each commit for the sign off message
           missingSignoff=0
