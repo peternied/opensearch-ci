@@ -16,7 +16,7 @@ jobs:
         run: | 
           # Get the list of commit ids to check from git
           echo "::notice ::Branches $(git branch -a)"
-          commits=$(git rev-list ${{github.base_ref}}..${{github.head_ref}} -- .)
+          commits=$(git rev-list remotes/origin/${{github.base_ref}}..HEAD --)
 
           # Scan each commit for the sign off message
           missingSignoff=0
