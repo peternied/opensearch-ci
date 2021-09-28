@@ -24,7 +24,7 @@ jobs:
           for commitId in $commits; do
               echo "::notice ::3 $commitId"
               commitMessage=$(git rev-list --format=%B --max-count=1 $commitId)
-              echo "::notice ::4"
+              echo "::notice ::4 $commitMessage"
               signoffStringCount=$(echo $commitMessage | grep -c Signed-off-by)
               echo "::notice ::5"
               if [ $signoffStringCount -eq 0 ]; then
