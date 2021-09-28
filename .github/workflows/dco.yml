@@ -15,9 +15,7 @@ jobs:
         id: dco_scan
         run: | 
           # Get the list of commit ids to check from git
-          echo "::set-output name=base::${{github.base_ref}}"
-          echo "::set-output name=head::${{github.head_ref}}"
-          echo "::notice ::Missing semicolon ${{github.head_ref}} ${{github.base_ref}}"
+          echo "::notice ::Branches $(git branch -a)"
           commits=$(git rev-list ${{github.base_ref}}..${{github.head_ref}} -- .)
 
           # Scan each commit for the sign off message
@@ -26,7 +24,7 @@ jobs:
               commitMessage=$(git rev-list --format=%B --max-count=1 $commitId)
               signoffStringCount=$(echo $commitMessage | grep -c Signed-off-by)
               if [ $signoffStringCount -eq 0 ]; then
-                echo "::set-output name=error::!!! Commit "$commitId" is missing signoff, amend this commit with the --signoff flag"
+                echo "::notice ::!!! Commit "$commitId" is missing signoff, amend this commit with the --signoff flag"
                 let "missingSignoff++"
               fi
           done
