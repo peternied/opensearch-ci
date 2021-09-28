@@ -7,34 +7,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-  
-      - name: Run CDK Build and Test
-        id: dco_scan
-        run: | 
-          # Get the list of commit ids to check from git
-          echo "::notice ::1"
-          commits=$(git rev-list remotes/origin/${{github.base_ref}}..remotes/origin/${{github.head_ref}} --)
-          echo "::notice ::2 $commits"
-
-          # Scan each commit for the sign off message
-          missingSignoff=0
-          for commitId in $commits; do
-              echo "::notice ::3 $commitId"
-              commitMessage=$(git rev-list --format=%B --max-count=1 $commitId)
-              echo "::notice ::4 $commitMessage"
-              signoffStringCount=$(echo $commitMessage | grep -c Signed-off-by)
-              echo "::notice ::5"
-              if [ $signoffStringCount -eq 0 ]; then
-                echo "::notice ::6"
-                echo "::notice ::!!! Commit "$commitId" is missing signoff, amend this commit with the --signoff flag"
-                let "missingSignoff++"
-              fi
-          done
-          echo "::notice ::7"
-
-          # Return non-zero error code if any commits were missing signoff
-          exit $missingSignoff
-
+    - name: Get PR Commits
+      id: 'get-pr-commits'
+      uses: tim-actions/get-pr-commits@master
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+    - name: DCO Check
+      uses: tim-actions/dco@master
+      with:
+        commits: ${{ steps.get-pr-commits.outputs.commits }}
