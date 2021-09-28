@@ -22,7 +22,7 @@ jobs:
           # Scan each commit for the sign off message
           missingSignoff=0
           for commitId in $commits; do
-              echo "::notice ::3"
+              echo "::notice ::3 $commitId"
               commitMessage=$(git rev-list --format=%B --max-count=1 $commitId)
               echo "::notice ::4"
               signoffStringCount=$(echo $commitMessage | grep -c Signed-off-by)
