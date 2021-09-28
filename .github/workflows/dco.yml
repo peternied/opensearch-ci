@@ -17,6 +17,7 @@ jobs:
           # Get the list of commit ids to check from git
           echo "::set-output name=base::${{github.base_ref}}"
           echo "::set-output name=head::${{github.head_ref}}"
+          echo "::notice file=app.js,line=1,col=5,endColumn=7::Missing semicolon ${{github.head_ref}} ${{github.base_ref}}"
           commits=$(git rev-list ${{github.base_ref}}..${{github.head_ref}} -- .)
 
           # Scan each commit for the sign off message
