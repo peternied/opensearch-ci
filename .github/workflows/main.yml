@@ -1,0 +1,7 @@
+name: External DCO Check
+on:
+  workflow_dispatch:
+
+jobs:
+  dco-check:
+    uses: opensearch-project/.github/workflows/doc.yml@main
